@@ -3,22 +3,29 @@
     <b-container>
       <b-row class="align-items-center justify-content-between">
         <b-card
-          v-for="(adopter, index) in adopters"
-          v-bind:key="index"
-          title="Card Title"
-          img-src="https://picsum.photos/600/300/?image=25"
+          v-for="pet in pets"
+          v-bind:key="pet.id"
+          :title="pet.name"
+          :img-src="pet.picture"
           img-alt="Image"
           img-top
           tag="article"
           style="max-width: 20rem;"
           class="mb-2"
-          :disabled="adopter !== '0x0000000000000000000000000000000000000000'"
         >
-          <b-card-text>
-            {{adopter}}
-          </b-card-text>
+          <b-list-group flush class="mb-3">
+            <b-list-group-item>{{pet.age}}</b-list-group-item>
+            <b-list-group-item>{{pet.breed}}</b-list-group-item>
+            <b-list-group-item>{{pet.location}}</b-list-group-item>
+          </b-list-group>
 
-          <b-button @click="handleAdopt(index)" variant="primary">Adopt</b-button>
+          <b-button
+            @click="handleAdopt(pet.id)"
+            :disabled="adopters[pet.id] !== '0x0000000000000000000000000000000000000000'"
+            variant="primary"
+          >
+            {{adopters[pet.id] !== '0x0000000000000000000000000000000000000000' ? 'Adopted' : 'Adopt'}}
+          </b-button>
         </b-card>
       </b-row>
     </b-container>
@@ -66,6 +73,9 @@ export default {
   computed: {
     adopters() {
       return this.$store.getters['pets/allAdopters']
+    },
+    pets() {
+      return this.$store.getters['pets/allPets']
     }
   }
 }
